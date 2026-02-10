@@ -2,7 +2,7 @@ import { useState } from "react";
 import MenuHeader from "@/components/MenuHeader";
 import CategoryNav from "@/components/CategoryNav";
 import MenuItemCard from "@/components/MenuItemCard";
-import TotalBar from "@/components/TotalBar";
+import CartDrawer from "@/components/CartDrawer";
 import { menuItems, categories } from "@/data/menu";
 import { useCart } from "@/hooks/useCart";
 
@@ -38,7 +38,13 @@ const Index = () => {
         </div>
       </main>
 
-      <TotalBar cart={cart} totalItems={totalItems} onClear={clearCart} />
+      <CartDrawer
+        cart={cart}
+        totalItems={totalItems}
+        onAdd={addItem}
+        onRemove={removeItem}
+        onClear={clearCart}
+      />
     </div>
   );
 };
