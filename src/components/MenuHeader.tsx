@@ -16,7 +16,7 @@ const MenuHeader = () => {
             <span className="text-2xl">☕</span>
           </div>
           <h1 className="text-2xl font-bold text-cream tracking-wide">
-            Gentlemen
+            To4kavcentre
           </h1>
           <p className="text-gold-light text-xs font-body tracking-[0.2em] uppercase mt-1">
             Premium Coffee House
