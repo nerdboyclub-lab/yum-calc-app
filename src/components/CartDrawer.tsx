@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { menuItems } from "@/data/menu";
-import { Minus, Plus, Trash2, X, ShoppingBag } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Send, Loader2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -7,6 +8,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface CartDrawerProps {
   cart: Record<string, number>;
@@ -17,6 +20,8 @@ interface CartDrawerProps {
 }
 
 const CartDrawer = ({ cart, totalItems, onAdd, onRemove, onClear }: CartDrawerProps) => {
+  const [sending, setSending] = useState(false);
+
   const cartEntries = Object.entries(cart)
     .map(([id, qty]) => {
       const item = menuItems.find((m) => m.id === id);
@@ -25,6 +30,27 @@ const CartDrawer = ({ cart, totalItems, onAdd, onRemove, onClear }: CartDrawerPr
     .filter(Boolean) as (typeof menuItems[number] & { quantity: number })[];
 
   const totalPrice = cartEntries.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleSendOrder = async () => {
+    if (cartEntries.length === 0) return;
+    setSending(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-telegram-order', {
+        body: {
+          items: cartEntries.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, volume: i.volume })),
+          total: totalPrice,
+        },
+      });
+      if (error) throw error;
+      toast.success('Заказ отправлен!');
+      onClear();
+    } catch (e) {
+      console.error(e);
+      toast.error('Ошибка отправки заказа');
+    } finally {
+      setSending(false);
+    }
+  };
 
   if (totalItems === 0) return null;
 
@@ -111,7 +137,7 @@ const CartDrawer = ({ cart, totalItems, onAdd, onRemove, onClear }: CartDrawerPr
               ))}
             </div>
 
-            <div className="px-5 pt-3 pb-5 border-t border-gold/10">
+            <div className="px-5 pt-3 pb-5 border-t border-gold/10 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Итого</span>
                 <p className="text-xl font-display font-bold text-cream">
@@ -119,6 +145,18 @@ const CartDrawer = ({ cart, totalItems, onAdd, onRemove, onClear }: CartDrawerPr
                   <span className="text-xs font-body font-normal text-gold-light/60">сум</span>
                 </p>
               </div>
+              <button
+                onClick={handleSendOrder}
+                disabled={sending}
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-semibold py-3 rounded-xl transition-colors disabled:opacity-50"
+              >
+                {sending ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Send className="w-5 h-5" />
+                )}
+                {sending ? 'Отправка...' : 'Сохранить заказ'}
+              </button>
             </div>
           </SheetContent>
         </Sheet>
