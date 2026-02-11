@@ -13,7 +13,7 @@ const MenuHeader = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-espresso/60 via-espresso/30 to-background" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
           <div className="w-16 h-16 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center mb-2 shadow-lg border border-gold/30">
-            <span className="flex rounded-full text-2xl"><img className="flex rounded-full" src="/public/favicon.ico" alt="" /></span>
+            <span className="flex rounded-full text-2xl"><img className="flex rounded-full" src="/favicon.ico" alt="" /></span>
           </div>
           <h1 className="text-2xl font-bold text-cream tracking-wide">
             To4kavcentre
