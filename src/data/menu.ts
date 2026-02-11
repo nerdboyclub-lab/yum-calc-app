@@ -58,9 +58,8 @@ export const menuItems: MenuItem[] = [
   { id: "english-breakfast", name: "Английский завтрак", price: 34000, category: "breakfast" },
   { id: "french-breakfast", name: "Французский завтрак", price: 34000, category: "breakfast" },
   { id: "soviet-breakfast", name: "Советский завтрак", price: 15000, category: "breakfast" },
-  { id: "sausage-pastry", name: "Сосиски в тесте", price: 0, category: "breakfast" },
   { id: "pp-breakfast", name: "ПП-Завтрак", price: 15000, category: "breakfast" },
-  { id: "bliny", name: "Блины", price: 0, category: "breakfast", description: "с мясом / творогом / нутеллой / вареньем" },
+  { id: "pancakes", name: "Блины", price: 0, variants: [{ volume: "с творогом", price: 3000 }, { volume: "с нутеллой", price: 5000 }, { volume: "с вареньем", price: 4000 }], category: "breakfast" },
   { id: "syrniki", name: "Сырники", price: 0, category: "breakfast" },
   { id: "potato-pies", name: "Пирожки с картошкой", price: 5000, category: "breakfast" },
   { id: "meat-pies", name: "Пирожки с мясом", price: 8000, category: "breakfast" },
@@ -70,7 +69,6 @@ export const menuItems: MenuItem[] = [
   // Фаст-фуд
   { id: "hamburger", name: "Гамбургер", price: 35000, category: "fastfood" },
   { id: "tochka-burger", name: "Точка Бургер", price: 38000, category: "fastfood" },
-  { id: "hotdog", name: "Хот-дог", price: 15000, category: "fastfood" },
   { id: "nuggets", name: "Наггетсы", price: 0, category: "fastfood" },
   { id: "strips", name: "Стрипсы", price: 23000, category: "fastfood" },
   { id: "hotdog", name: "Хот-дог", price: 18000, category: "fastfood" },
@@ -86,7 +84,6 @@ export const menuItems: MenuItem[] = [
   // Акции
     { id: "bun+coffee/tea", name: "Зебра + кофе чай", price: 10000, category: "promo" },
     { id: "zebra+coffee/tea", name: "Булочка + кофе чай", price: 10000, category: "promo" },
-    { id: "zebra+coffee/tea", name: "Зерба", price: 10000, category: "promo" },
 ];
 
 
