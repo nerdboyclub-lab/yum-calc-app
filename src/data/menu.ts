@@ -35,9 +35,11 @@ export const menuItems: MenuItem[] = [
   { id: "chai-karak", name: "Чай Карак", variants: [{ volume: "75мл", price: 6000 }, { volume: "100мл", price: 12000 }], category: "hot-drinks" },
   { id: "chai-masala", name: "Чай Масала", variants: [{ volume: "75мл", price: 6000 }, { volume: "100мл", price: 12000 }], category: "hot-drinks" },
   { id: "chai-cardamon", name: "Чай Кардамон", variants: [{ volume: "75мл", price: 6000 }, { volume: "100мл", price: 12000 }], category: "hot-drinks" },
+  { id: "chai-safrom", name: "Чай Сафром", variants: [{ volume: "75мл", price: 6000 }, { volume: "100мл", price: 12000 }], category: "hot-drinks" },
   { id: "tea-lemon", name: "Чай с лимоном", price: 10000, category: "hot-drinks" },
   { id: "tea-raspberry", name: "Чай с малиной", price: 15000, category: "hot-drinks" },
   { id: "coffee-3in1", name: "Кофе 3в1", volume: "0.4л", price: 6000, category: "hot-drinks" },
+  { id: "coffee-chocolate", name: "Кофе с шоколадом", price: 6000, category: "promo" },
   { id: "latte", name: "Латте", price: 0, category: "hot-drinks" },
   { id: "cappuccino", name: "Капучино", price: 0, category: "hot-drinks" },
   { id: "espresso", name: "Эспрессо", price: 0, category: "hot-drinks" },
@@ -60,7 +62,10 @@ export const menuItems: MenuItem[] = [
   { id: "pp-breakfast", name: "ПП-Завтрак", price: 15000, category: "breakfast" },
   { id: "bliny", name: "Блины", price: 0, category: "breakfast", description: "с мясом / творогом / нутеллой / вареньем" },
   { id: "syrniki", name: "Сырники", price: 0, category: "breakfast" },
+  { id: "potato-pies", name: "Пирожки с картошкой", price: 5000, category: "breakfast" },
+  { id: "meat-pies", name: "Пирожки с мясом", price: 8000, category: "breakfast" },
   { id: "croissants", name: "Круассаны", price: 35000, category: "breakfast", description: "с ветчиной / индейкой" },
+  { id: "sausages-in-dough", name: "Сосиски в тесте", price: 10000, category: "breakfast", description: "с ветчиной / индейкой" },
 
   // Фаст-фуд
   { id: "hamburger", name: "Гамбургер", price: 35000, category: "fastfood" },
@@ -68,13 +73,23 @@ export const menuItems: MenuItem[] = [
   { id: "hotdog", name: "Хот-дог", price: 15000, category: "fastfood" },
   { id: "nuggets", name: "Наггетсы", price: 0, category: "fastfood" },
   { id: "strips", name: "Стрипсы", price: 23000, category: "fastfood" },
+  { id: "hotdog", name: "Хот-дог", price: 18000, category: "fastfood" },
+  { id: "pita", name: "Лаваш", price: 26000, category: "fastfood" },
 
   // Десерты
   { id: "pryaniki", name: "Пряники", price: 0, category: "desserts" },
   { id: "vienna-waffles", name: "Венские вафли", price: 0, category: "desserts", description: "с нутеллой / бананом / клубникой" },
   { id: "san-sebastian", name: "Сан-Себастьян", price: 0, category: "desserts" },
   { id: "buns", name: "Булочки", price: 8000, category: "desserts" },
+  { id: "zebra", name: "Зерба", price: 6000, category: "desserts" },
+    
+  // Акции
+    { id: "bun+coffee/tea", name: "Зебра + кофе чай", price: 10000, category: "promo" },
+    { id: "zebra+coffee/tea", name: "Булочка + кофе чай", price: 10000, category: "promo" },
+    { id: "zebra+coffee/tea", name: "Зерба", price: 10000, category: "promo" },
 ];
+
+
 
 // Helper: get the effective price and volume for a cart key like "tea::0" or "scramble"
 export function parseCartKey(key: string): { itemId: string; variantIndex?: number } {
