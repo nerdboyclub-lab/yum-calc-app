@@ -22,7 +22,7 @@ export interface Category {
 
 export const categories: Category[] = [
   { id: "hot-drinks", name: "Горячие напитки", emoji: "☕" },
-  { id: "cold-drinks", name: "Холодные напитки", emoji: "🥤" },
+  // { id: "cold-drinks", name: "Холодные напитки", emoji: "🥤" },
   { id: "breakfast", name: "Завтраки", emoji: "🍳" },
   { id: "fastfood", name: "Фаст-фуд", emoji: "🍔" },
   { id: "desserts", name: "Десерты", emoji: "🍰" },
