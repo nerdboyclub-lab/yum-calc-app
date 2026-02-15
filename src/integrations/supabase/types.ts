@@ -86,6 +86,7 @@ export type Database = {
           items: Json
           order_number: number | null
           payment_method: string
+          telegram_message_id: number | null
           total: number
         }
         Insert: {
@@ -94,6 +95,7 @@ export type Database = {
           items: Json
           order_number?: number | null
           payment_method?: string
+          telegram_message_id?: number | null
           total: number
         }
         Update: {
@@ -102,6 +104,7 @@ export type Database = {
           items?: Json
           order_number?: number | null
           payment_method?: string
+          telegram_message_id?: number | null
           total?: number
         }
         Relationships: []
