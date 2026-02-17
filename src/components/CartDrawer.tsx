@@ -204,6 +204,10 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
                     <RadioGroupItem value="card" />
                     <span className="text-sm text-foreground">💳 Карта</span>
                   </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <RadioGroupItem value="payme" />
+                    <span className="text-sm text-foreground">💳 Payme/Click</span>
+                  </label>
                 </RadioGroup>
               </div>
 
