@@ -75,7 +75,8 @@ serve(async (req) => {
     }
 
     // Build message
-    const paymentLabel = latestPaymentMethod === 'card' ? 'Карта' : 'Наличные';
+    const paymentLabels: Record<string, string> = { card: 'Карта', cash: 'Наличные', payme_click: 'Payme/Click' };
+    const paymentLabel = paymentLabels[latestPaymentMethod] || latestPaymentMethod;
     let message = `🧾 <b>Заказ №${order_number}</b>\n\n`;
     for (const item of allItems) {
       const subtotal = item.price * item.quantity;
