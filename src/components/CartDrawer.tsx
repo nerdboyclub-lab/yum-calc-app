@@ -25,7 +25,7 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, menuItems }: CartDrawerProps) => {
   const [sending, setSending] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
+  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "payme_click">("cash");
   const [manualOrderNumber, setManualOrderNumber] = useState("");
 
   const cartEntries = Object.entries(cart)
@@ -193,8 +193,8 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
                 <label className="text-xs text-muted-foreground mb-2 block">Способ оплаты</label>
                 <RadioGroup
                   value={paymentMethod}
-                  onValueChange={(v) => setPaymentMethod(v as "cash" | "card")}
-                  className="flex gap-4"
+                  onValueChange={(v) => setPaymentMethod(v as "cash" | "card" | "payme_click")}
+                  className="flex gap-4 flex-wrap"
                 >
                   <label className="flex items-center gap-2 cursor-pointer">
                     <RadioGroupItem value="cash" />
@@ -203,6 +203,10 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
                   <label className="flex items-center gap-2 cursor-pointer">
                     <RadioGroupItem value="card" />
                     <span className="text-sm text-foreground">💳 Карта</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <RadioGroupItem value="payme_click" />
+                    <span className="text-sm text-foreground">📱 Payme/Click</span>
                   </label>
                 </RadioGroup>
               </div>
