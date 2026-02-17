@@ -114,7 +114,7 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
             </button>
           </SheetTrigger>
 
-          <SheetContent side="bottom" className="bg-background border-t border-gold/20 rounded-t-3xl max-h-[80vh] px-0">
+          <SheetContent side="bottom" className="bg-background border-t border-gold/20 rounded-t-3xl max-h-[85vh] px-0 flex flex-col">
             <SheetHeader className="px-5 pb-3 border-b border-gold/10">
               <div className="flex items-center justify-between">
                 <SheetTitle className="font-display text-lg text-foreground">
@@ -130,7 +130,7 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
               </div>
             </SheetHeader>
 
-            <div className="overflow-y-auto max-h-[55vh] px-5 py-3 space-y-2">
+            <div className="overflow-y-auto flex-1 min-h-0 px-5 py-3 space-y-2">
               {cartEntries.map((entry) => (
                 <div
                   key={entry.cartKey}
@@ -172,7 +172,7 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
               ))}
             </div>
 
-            <div className="px-5 pt-3 pb-5 border-t border-gold/10 space-y-3">
+            <div className="px-5 pt-3 pb-5 border-t border-gold/10 space-y-3 flex-shrink-0">
               {/* Manual order number */}
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">
