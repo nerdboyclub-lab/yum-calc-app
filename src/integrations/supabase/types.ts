@@ -86,6 +86,7 @@ export type Database = {
           items: Json
           order_number: number | null
           payment_method: string
+          status: string
           telegram_message_id: number | null
           total: number
         }
@@ -95,6 +96,7 @@ export type Database = {
           items: Json
           order_number?: number | null
           payment_method?: string
+          status?: string
           telegram_message_id?: number | null
           total: number
         }
@@ -104,6 +106,7 @@ export type Database = {
           items?: Json
           order_number?: number | null
           payment_method?: string
+          status?: string
           telegram_message_id?: number | null
           total?: number
         }
