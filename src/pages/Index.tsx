@@ -4,17 +4,18 @@ import CategoryNav from "@/components/CategoryNav";
 import MenuItemCard from "@/components/MenuItemCard";
 import CustomItemCard from "@/components/CustomItemCard";
 import CartDrawer from "@/components/CartDrawer";
+import ActiveOrders from "@/components/ActiveOrders";
 import { useMenu } from "@/hooks/useMenu";
 import { useCart } from "@/hooks/useCart";
+import { useActiveOrders } from "@/hooks/useActiveOrders";
 
 const Index = () => {
   const { categories, menuItems, loading } = useMenu();
   const [activeCategory, setActiveCategory] = useState("");
   const { cart, customItems, addItem, removeItem, addCustomItem, getQuantity, totalItems, clearCart } = useCart();
+  const { orders: activeOrders, loading: ordersLoading, fetchOrders, markAsPaid, deleteOrder, updateOrder } = useActiveOrders();
 
-  // Set default category once loaded
   const effectiveCategory = activeCategory || (categories.length > 0 ? categories[0].id : "");
-
   const filteredItems = menuItems.filter((item) => item.category === effectiveCategory);
   const activeCategoryName = categories.find((c) => c.id === effectiveCategory)?.name || "";
 
@@ -30,6 +31,15 @@ const Index = () => {
     <div className="min-h-screen bg-background max-w-lg mx-auto relative">
       <MenuHeader />
       <CategoryNav categories={categories} activeCategory={effectiveCategory} onSelect={setActiveCategory} />
+
+      {/* Active orders block */}
+      <ActiveOrders
+        orders={activeOrders}
+        loading={ordersLoading}
+        onMarkPaid={markAsPaid}
+        onDelete={deleteOrder}
+        onUpdate={updateOrder}
+      />
 
       <main className="px-4 pt-4 pb-28">
         <h2 className="font-display text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -67,6 +77,7 @@ const Index = () => {
         onRemove={removeItem}
         onClear={clearCart}
         menuItems={menuItems}
+        onOrderCreated={fetchOrders}
       />
     </div>
   );
