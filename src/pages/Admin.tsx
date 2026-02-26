@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMenu } from "@/hooks/useMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Trash2, Plus, ArrowLeft, X } from "lucide-react";
+import { Trash2, Plus, ArrowLeft, X, Send, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Variant {
@@ -21,6 +21,7 @@ const Admin = () => {
   const [adding, setAdding] = useState(false);
   const [useVariants, setUseVariants] = useState(false);
   const [variants, setVariants] = useState<Variant[]>([{ volume: "", price: "" }]);
+  const [sendingReport, setSendingReport] = useState(false);
 
   const addVariantRow = () => setVariants([...variants, { volume: "", price: "" }]);
   const removeVariantRow = (i: number) => setVariants(variants.filter((_, idx) => idx !== i));
@@ -95,6 +96,20 @@ const Admin = () => {
     }
   };
 
+  const handleSendReport = async () => {
+    setSendingReport(true);
+    try {
+      const { error } = await supabase.functions.invoke('send-daily-report');
+      if (error) throw error;
+      toast.success("Итоги дня отправлены в Telegram!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Ошибка отправки отчёта");
+    } finally {
+      setSendingReport(false);
+    }
+  };
+
   const formatPrice = (p: number) => p.toLocaleString("ru-RU");
 
   if (loading) {
@@ -114,6 +129,22 @@ const Admin = () => {
         <h1 className="font-display text-xl font-bold text-foreground">Управление меню</h1>
       </div>
 
+      {/* Send daily report button */}
+      <div className="bg-card border border-border rounded-2xl p-4 mb-6">
+        <button
+          onClick={handleSendReport}
+          disabled={sendingReport}
+          className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-display font-semibold py-2.5 rounded-xl transition-colors disabled:opacity-50"
+        >
+          {sendingReport ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Send className="w-4 h-4" />
+          )}
+          {sendingReport ? "Отправка..." : "📊 Отправить итоги дня"}
+        </button>
+      </div>
+
       {/* Add item form */}
       <div className="bg-card border border-border rounded-2xl p-4 mb-6 space-y-3">
         <h2 className="font-display text-sm font-semibold text-foreground flex items-center gap-2">
@@ -129,7 +160,6 @@ const Admin = () => {
           className="w-full bg-muted/30 border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
         />
 
-        {/* Variants toggle */}
         <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
           <input
             type="checkbox"

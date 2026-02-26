@@ -31,9 +31,11 @@ serve(async (req) => {
     const startUTC = new Date(startOfDayTashkent.getTime() - tashkentOffset);
     const endUTC = new Date(startUTC.getTime() + 24 * 60 * 60 * 1000);
 
+    // Only count PAID orders
     const { data: orders, error } = await supabase
       .from('orders')
       .select('*')
+      .eq('status', 'paid')
       .gte('created_at', startUTC.toISOString())
       .lt('created_at', endUTC.toISOString());
 
@@ -42,13 +44,13 @@ serve(async (req) => {
     const totalOrders = orders?.length ?? 0;
     const totalSum = orders?.reduce((sum: number, o: any) => sum + o.total, 0) ?? 0;
 
-    // Payment stats
     const cashOrders = orders?.filter((o: any) => o.payment_method === 'cash') ?? [];
     const cardOrders = orders?.filter((o: any) => o.payment_method === 'card') ?? [];
+    const paymeOrders = orders?.filter((o: any) => o.payment_method === 'payme_click') ?? [];
     const cashSum = cashOrders.reduce((s: number, o: any) => s + o.total, 0);
     const cardSum = cardOrders.reduce((s: number, o: any) => s + o.total, 0);
+    const paymeSum = paymeOrders.reduce((s: number, o: any) => s + o.total, 0);
 
-    // Product stats
     const productMap: Record<string, { qty: number; sum: number }> = {};
     for (const order of (orders ?? [])) {
       const items = order.items as any[];
@@ -71,6 +73,11 @@ serve(async (req) => {
 
     message += `💳 Оплата картой:\n`;
     message += `${cardOrders.length} заказов — ${cardSum.toLocaleString('ru-RU')} сум\n\n`;
+
+    if (paymeOrders.length > 0) {
+      message += `📱 Payme/Click:\n`;
+      message += `${paymeOrders.length} заказов — ${paymeSum.toLocaleString('ru-RU')} сум\n\n`;
+    }
 
     message += `———\n\n`;
 

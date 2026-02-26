@@ -21,16 +21,16 @@ interface CartDrawerProps {
   onRemove: (id: string) => void;
   onClear: () => void;
   menuItems: MenuItem[];
+  onOrderCreated?: () => void;
 }
 
-const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, menuItems }: CartDrawerProps) => {
+const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, menuItems, onOrderCreated }: CartDrawerProps) => {
   const [sending, setSending] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "payme_click">("cash");
   const [manualOrderNumber, setManualOrderNumber] = useState("");
 
   const cartEntries = Object.entries(cart)
     .map(([key, qty]) => {
-      // Custom items
       if (key.startsWith("custom::")) {
         const ci = customItems[key];
         if (!ci) return null;
@@ -47,19 +47,18 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
 
   const totalPrice = cartEntries.reduce((sum, e) => sum + e.price * e.quantity, 0);
 
-  const handleSendOrder = async () => {
+  const handleCreateDraft = async () => {
     if (cartEntries.length === 0) return;
     setSending(true);
     try {
       const orderItems = cartEntries.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, volume: i.volume }));
 
-      // Get auto order number
       const { data: autoNum } = await supabase.rpc('next_order_number');
       const orderNumber = manualOrderNumber.trim()
         ? parseInt(manualOrderNumber.trim(), 10) || autoNum || 1
         : (autoNum || 1);
 
-      // Save order to database
+      // Save as draft — do NOT send to Telegram
       const { error: dbError } = await supabase
         .from('orders')
         .insert({
@@ -67,21 +66,19 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
           total: totalPrice,
           order_number: orderNumber,
           payment_method: paymentMethod,
+          status: 'draft',
         });
-      if (dbError) console.error('Failed to save order to DB:', dbError);
 
-      // Send to Telegram
-      const { error } = await supabase.functions.invoke('send-telegram-order', {
-        body: { items: orderItems, total: totalPrice, order_number: orderNumber, payment_method: paymentMethod },
-      });
-      if (error) throw error;
-      toast.success(`Заказ №${orderNumber} отправлен!`);
+      if (dbError) throw dbError;
+
+      toast.success(`Заказ №${orderNumber} создан`);
       onClear();
       setManualOrderNumber("");
       setPaymentMethod("cash");
+      onOrderCreated?.();
     } catch (e) {
       console.error(e);
-      toast.error('Ошибка отправки заказа');
+      toast.error('Ошибка создания заказа');
     } finally {
       setSending(false);
     }
@@ -173,7 +170,6 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
             </div>
 
             <div className="px-5 pt-3 pb-5 border-t border-gold/10 space-y-3 flex-shrink-0">
-              {/* Manual order number */}
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">
                   Указать номер заказа (необязательно)
@@ -188,7 +184,6 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
                 />
               </div>
 
-              {/* Payment method */}
               <div>
                 <label className="text-xs text-muted-foreground mb-2 block">Способ оплаты</label>
                 <RadioGroup
@@ -219,7 +214,7 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
                 </p>
               </div>
               <button
-                onClick={handleSendOrder}
+                onClick={handleCreateDraft}
                 disabled={sending}
                 className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-display font-semibold py-3 rounded-xl transition-colors disabled:opacity-50"
               >
@@ -228,7 +223,7 @@ const CartDrawer = ({ cart, customItems, totalItems, onAdd, onRemove, onClear, m
                 ) : (
                   <Send className="w-5 h-5" />
                 )}
-                {sending ? 'Отправка...' : 'Сохранить заказ'}
+                {sending ? 'Создание...' : 'Создать заказ'}
               </button>
             </div>
           </SheetContent>
